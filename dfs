@@ -1,3 +1,6 @@
+//Depth First Seach
+
+
 //function to execute dfs logic
 void dfs(int i , vector<int> adj[ ] ,unordered_map<int,bool> &visited, 
 vector<int> &component){
