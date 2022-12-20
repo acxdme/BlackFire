@@ -1,0 +1,29 @@
+// Method-1 : Recursive approach
+/*
+Time complexity : 
+Space complexity :
+Recursive Releation used : f(s) = f(s+1) + f(s+2) 
+where f(s) is the total number of ways to reach the nth stairs from s.
+[ Ex : f(0) = f(1) + f(2) ]
+*/
+
+#include <bits/stdc++.h> 
+using namespace std;
+#define MOD 1000000007
+
+int findWays(int curr, int nstairs){
+    if(curr == nstairs) return 1;
+    if(curr > nstairs){
+        return 0;
+    }
+  
+    return ( findWays(curr+1,nstairs) + findWays(curr+2,nstairs)) % MOD;
+}
+int countDistinctWays(int nStairs) {
+    
+    int res;
+    res = findWays(0,nStairs);
+    
+    return res;
+   
+}
