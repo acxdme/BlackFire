@@ -1,0 +1,28 @@
+// Top-down approach
+/*
+Time complexity :
+Space complexity :
+Recursive relation used : 
+*/
+
+class Solution {
+public:
+
+    int minCost(int curr ,int nStairs , vector<int>&cost,vector<int> &dp)
+    {
+        if(curr >= nStairs ) return 0;
+        if(dp[curr] != -1) return dp[curr];
+
+        return dp[curr] = (min(minCost(curr+1,nStairs,cost,dp),minCost(curr+2,nStairs,cost,dp))+ cost[curr] );
+
+    }
+    int minCostClimbingStairs(vector<int>& cost) {
+        
+        int nStairs = cost.size();
+        vector<int> dp (nStairs,-1);
+        int res = min(minCost(0,nStairs,cost,dp),minCost(1,nStairs,cost,dp));
+
+        return res;
+    }
+    
+};
