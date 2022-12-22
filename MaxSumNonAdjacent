@@ -1,0 +1,35 @@
+#include <bits/stdc++.h> 
+using namespace std;
+
+// int solveRec(vector<int> &nums , int index){
+//     if(index < 0) return 0;
+//     if(index == 0 ) return nums[0];
+    
+//     int including = solveRec(nums,index-2) + nums[index];
+//     int excluding = solveRec(nums,index-1) + 0;
+    
+//     return max(including,excluding);
+// }
+
+int solveMem(vector<int> &nums , int index , vector<int> &dp){
+    if(index < 0) return 0;
+    if(index == 0 ) return nums[0];
+    if(dp[index] != -1 ) return dp[index];
+    
+    int including = solveMem(nums,index-2,dp) + nums[index];
+    int excluding = solveMem(nums,index-1,dp) + 0;
+    
+    dp[index] = max(including,excluding);
+    return  dp[index];
+}
+
+int maximumNonAdjacentSum(vector<int> &nums){
+    
+//     int n = nums.size();
+//     int ans = solveRec(nums,n-1);
+    
+    int n = nums.size();
+    vector<int> dp(n,-1);
+    int ans = solveMem(nums,n-1,dp);
+    return ans;
+} 
