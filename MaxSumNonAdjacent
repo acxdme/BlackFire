@@ -11,25 +11,69 @@ using namespace std;
 //     return max(including,excluding);
 // }
 
-int solveMem(vector<int> &nums , int index , vector<int> &dp){
-    if(index < 0) return 0;
-    if(index == 0 ) return nums[0];
-    if(dp[index] != -1 ) return dp[index];
+// int solveMem(vector<int> &nums , int index , vector<int> &dp){
+//     if(index < 0) return 0;
+//     if(index == 0 ) return nums[0];
+//     if(dp[index] != -1 ) return dp[index];
     
-    int including = solveMem(nums,index-2,dp) + nums[index];
-    int excluding = solveMem(nums,index-1,dp) + 0;
+//     int including = solveMem(nums,index-2,dp) + nums[index];
+//     int excluding = solveMem(nums,index-1,dp) + 0;
     
-    dp[index] = max(including,excluding);
-    return  dp[index];
+//     dp[index] = max(including,excluding);
+//     return  dp[index];
+// }
+
+// int solveTab(vector<int> &nums){
+    
+//     int n = nums.size();
+//     vector<int> dp(n,0);
+//     //base-case
+//     dp[0] = nums[0];
+    
+//     for(int i =1 ; i<n ;i++){
+//       int including = dp[i-2] + nums[i];
+//       int excluding = dp[i-1] + 0;
+//         dp[i] = max(including,excluding);
+//     }
+    
+//     return  dp[n-1];
+// }
+
+int solveSpaceOp(vector<int> &nums){
+    
+    int n = nums.size();
+//     int current = nums[0];
+    //base-case
+     int prev2 = 0;
+     int prev1 = nums[0];
+    
+    for(int i =1 ; i<n ;i++){
+      int including = prev2 + nums[i];
+      int excluding = prev1 + 0;
+      int current = max(including,excluding);
+        prev2 = prev1;
+        prev1 = current;
+    }
+    
+    return  prev1;
 }
+
 
 int maximumNonAdjacentSum(vector<int> &nums){
     
+   //Recursive
 //     int n = nums.size();
 //     int ans = solveRec(nums,n-1);
     
-    int n = nums.size();
-    vector<int> dp(n,-1);
-    int ans = solveMem(nums,n-1,dp);
+    //Recursive+Memoization (Top-Down)
+//     int n = nums.size();
+//     vector<int> dp(n,-1);
+//     int ans = solveMem(nums,n-1,dp);
+    
+    //Tabular (Bottom Up)
+//     int ans = solveTab(nums);
+    
+    //Space Optimization
+    int ans = solveSpaceOp(nums);
     return ans;
 } 
