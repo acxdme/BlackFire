@@ -1,0 +1,64 @@
+/*
+
+Space optimization not possible.
+*/
+#include <bits/stdc++.h> 
+
+// int solveRec(vector<int> &num,int n , int tar){
+//     if(tar == 0) return 1;
+//     if(tar < 0 ) return 0;
+    
+//     int res = 0;
+//     for(int i =0 ;i< n ;i++){
+//       res += solveRec(num,n,tar-num[i]);
+//     }
+    
+//     return res;    
+// }
+
+// int solveMem(vector<int> &num, int n , int tar, vector<int> &dp){
+//     if(tar == 0) return 1;
+//     if(tar < 0 ) return 0;
+//     if(dp[tar] != 0 ) return dp[tar];
+    
+//     for(int i =0 ;i< n ;i++){
+//       dp[tar] += solveMem(num,n,tar-num[i],dp);
+//     }
+    
+//     return dp[tar];    
+// }
+
+int solveTab(vector<int> &num, int tar, vector<int> &dp){
+
+    if(dp[tar] != 0 ) return dp[tar];
+    dp[0] = 1 ;
+    
+   for(int i =1 ;i<= tar; i++){
+       for(auto n : num){
+            if(i >= n)
+            {
+                dp[i] += dp[i-n];
+            }
+       }
+   }
+    
+    return dp[tar];    
+}
+
+int findWays(vector<int> &num, int tar)
+{
+    //Recursive approach
+//     int n = num.size();
+//     int ans = solveRec(num,n,tar);
+    
+    //Recursion+Memorization (Top-down) approach
+//      int n = num.size();
+//      vector<int> dp(tar+1,0);
+//      int ans = solveMem(num,n,tar,dp);
+    
+    //Tabulation (Bottom-up) approach
+     vector<int> dp(tar+1,0);
+     int ans = solveTab(num,tar,dp);
+    
+    return ans;
+}
