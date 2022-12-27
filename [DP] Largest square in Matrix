@@ -1,0 +1,77 @@
+
+class Solution{
+public:
+
+    // int solveRec(int row , int col ,vector<vector<int>> &mat,int &maxi ){
+    //     if(row >= mat.size() || col >= mat[0].size()) return 0;
+        
+    //     int rowPlus = solveRec(row+1,col,mat,maxi);
+    //     int diag = solveRec(row+1,col+1,mat,maxi);
+    //     int colPlus = solveRec(row,col+1,mat,maxi);
+        
+    //     if(mat[row][col] == 1){
+    //         int res = 1 + min(rowPlus,min(diag,colPlus));
+    //         maxi = max(maxi,res);
+    //         return res;
+    //     }
+        
+    //     return 0;
+    // }
+    
+    // int solveMem(int row , int col ,vector<vector<int>> &mat,int &maxi,vector<vector<int>> &dp ){
+    //     if(row >= mat.size() || col >= mat[0].size()) return 0;
+    //     if(dp[row][col] != -1) return dp[row][col];
+        
+    //     int rowPlus = solveMem(row+1,col,mat,maxi,dp);
+    //     int diag = solveMem(row+1,col+1,mat,maxi,dp);
+    //     int colPlus = solveMem(row,col+1,mat,maxi,dp);
+        
+    //     if(mat[row][col] == 1){
+    //         dp[row][col] = 1 + min(rowPlus,min(diag,colPlus));
+    //         maxi = max(maxi,dp[row][col]);
+    //         return dp[row][col];
+    //     }
+        
+    //     return 0;
+    // }
+    
+    int solveTab(vector<vector<int>> &mat){
+             int row = mat.size();
+             int col = mat[0].size();
+             vector<vector<int>> dp(row+1,vector<int>(col+1,0));
+             
+             int maxi = 0;
+             for(int r = row-1;r >= 0 ;r--){
+                 for(int c = col-1;c >= 0 ; c--){
+                    int rowPlus = dp[r+1][c];
+                    int diag = dp[r+1][c+1];
+                    int colPlus = dp[r][c+1];
+                    
+                    if(mat[r][c] == 1){
+                        dp[r][c] = 1 + min(rowPlus,min(diag,colPlus));
+                        maxi = max(maxi,dp[r][c]);
+            }
+                 }
+             }            
+            return maxi;
+    }
+    
+    
+    
+    int maxSquare(int n, int m, vector<vector<int>> mat){
+        
+        //recursive approach
+        // int maxi =0 ;
+        // int res = solveRec(0,0,mat,maxi);
+        
+        //Memoization + Recursion (Top-down) approach
+        //  vector<vector<int>> dp(n,vector<int>(m,-1));
+        //  int maxi =0;
+        //  int res = solveMem(0,0,mat,maxi,dp);
+        
+        // Tabulation(Bottom-up) approach
+         int maxi = solveTab(mat);
+         
+         return maxi;
+    }
+};
