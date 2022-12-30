@@ -1,3 +1,15 @@
+    /*
+    
+    5 6
+    
+    0 1 0 1 0 1
+    1 0 1 0 1 0
+    0 1 1 1 1 0
+    0 0 1 1 1 0
+    1 1 1 1 1 1
+    
+    */
+
 
 class Solution{
 public:
@@ -35,29 +47,89 @@ public:
     //     return 0;
     // }
     
-    int solveTab(vector<vector<int>> &mat){
-             int row = mat.size();
-             int col = mat[0].size();
-             vector<vector<int>> dp(row+1,vector<int>(col+1,0));
+    // int solveTab(vector<vector<int>> &mat){
+    //          int row = mat.size();
+    //          int col = mat[0].size();
+    //          vector<vector<int>> dp(row+1,vector<int>(col+1,0));
              
-             int maxi = 0;
-             for(int r = row-1;r >= 0 ;r--){
-                 for(int c = col-1;c >= 0 ; c--){
-                    int rowPlus = dp[r+1][c];
-                    int diag = dp[r+1][c+1];
-                    int colPlus = dp[r][c+1];
+    //          int maxi = 0;
+    //          for(int r = row-1;r >= 0 ;r--){
+    //              for(int c = col-1;c >= 0 ; c--){
+    //                 int rowPlus = dp[r+1][c];
+    //                 int diag = dp[r+1][c+1];
+    //                 int colPlus = dp[r][c+1];
                     
-                    if(mat[r][c] == 1){
-                        dp[r][c] = 1 + min(rowPlus,min(diag,colPlus));
-                        maxi = max(maxi,dp[r][c]);
+    //                 if(mat[r][c] == 1){
+    //                     dp[r][c] = 1 + min(rowPlus,min(diag,colPlus));
+    //                     maxi = max(maxi,dp[r][c]);
+    //         }
+    //              }
+    //          }            
+    //         return maxi;
+    // }
+    
+    
+    // Space Optimization approaches {there are two optimization }
+    
+    // O(2*m space optimization)
+    int solveSO(vector<vector<int>> &mat){
+        int row = mat.size();
+        int col = mat[0].size();
+    
+        vector<int> next(col+1,0);
+        vector<int> curr(col+1,0);
+         
+        int maxi = 0;
+        
+        for(int r = row-1; r>=0 ; r--){
+          for(int c = col-1;c>=0 ;c--){
+              
+            int rowPlus= next[c];
+            int diag = next[c+1];
+            int colPlus = curr[c+1];
+            
+                if(mat[r][c] == 1 ){
+                    curr[c] = 1+min(rowPlus,min(diag,colPlus));
+                    maxi = max(maxi,curr[c]);
+                }
+                else{
+                    curr[c] = 0;
+                }
             }
-                 }
-             }            
-            return maxi;
+        next = curr;
+       }
+        return maxi;
     }
     
+    // O(1) space optimization , utilize the given matrix
     
+    int solveSO2(vector<vector<int>> &mat){
+        
+        int row = mat.size();
+        int col = mat[0].size();
+        
+        int maxi = 0;
+        for(int r = row-1; r>=0;r--){
+            for(int c = col-1;c>=0;c--){
+                if(mat[r][c] != 0){
+                    int rowPlus = 0;
+                    int colPlus = 0;
+                    int diag  = 0;
+                    
+                      if(c+1 < col) colPlus = mat[r][c+1];
+                      if(r+1 < row) rowPlus = mat[r+1][c];
+                      if(c+1 < col && r+1 < row) diag = mat[r+1][c+1];
+                     
+                    mat[r][c] =  1+ min(rowPlus,min(colPlus,diag));
+                    maxi = max(maxi,mat[r][c]);
+                }
+            }
+        }
+        
+        return maxi;
+    }
     
+        
     int maxSquare(int n, int m, vector<vector<int>> mat){
         
         //recursive approach
@@ -70,8 +142,16 @@ public:
         //  int res = solveMem(0,0,mat,maxi,dp);
         
         // Tabulation(Bottom-up) approach
-         int maxi = solveTab(mat);
+        //  int maxi = solveTab(mat);
          
-         return maxi;
+         
+         //Space-Optimization O(2*m)
+        //  int maxi = 0;
+        //  int res = solveSO(mat);
+        
+        //Space-Optimization O(1)
+         int res = solveSO2(mat);
+         
+         return res;
     }
 };
