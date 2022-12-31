@@ -1,0 +1,99 @@
+class Solution {
+public:
+
+    // int solveRec(int currPos ,int currLane,int &endPos , vector<int> &obstacles){
+    //     if(currPos == endPos-1) return 0;
+
+    //     if(obstacles[currPos+1] != currLane){
+    //         int ans = solveRec(currPos+1,currLane,endPos,obstacles);
+    //         return ans;
+    //     }
+    //     else{
+    //         int ans = INT_MAX;
+    //         for(int i=1 ;i <=3 ;i++){
+    //             if(i != currLane && obstacles[currPos] != i)
+    //              ans = min(ans, 1 + solveRec(currPos,i,endPos,obstacles));
+    //         }
+
+    //         return ans;
+    //     }
+
+    // }
+
+    //     int solveMem(int currPos ,int currLane,int &endPos , vector<int> &obstacles,vector<vector<int>> &dp){
+    //     if(currPos == endPos-1) return 0;
+    //     if(dp[currLane][currPos] != -1) return dp[currLane][currPos];
+
+    //     if(obstacles[currPos+1] != currLane){
+    //         int ans = solveMem(currPos+1,currLane,endPos,obstacles,dp);
+    //         return ans;
+    //     }
+    //     else{
+    //         int ans = INT_MAX;
+    //         for(int i=1 ;i <=3 ;i++){
+    //             if(i != currLane && obstacles[currPos] != i)
+    //              ans = min(ans, 1 + solveMem(currPos,i,endPos,obstacles,dp));
+    //         }
+    //         dp[currLane][currPos] = ans;
+
+    //         return ans;
+    //     }
+
+    // }
+
+ int solveTab(vector<int> &obstacles){
+        int n = obstacles.size();
+        vector<vector<int>> dp(4,vector<int>(n,999));
+        dp[2][0] = 0;
+        for(int r = 1 ; r<=3;r++){
+            if(r!=2) dp[r][0] = 1;
+        }
+
+        for(int c = 1 ; c<= n-1;c++){
+            for(int r =1; r<=3;r++){
+                if(obstacles[c] != r){
+                    if(obstacles[c-1] != r ) dp[r][c] = dp[r][c-1];
+                    else{
+                        int ans = INT_MAX;
+                        for(int i = 1; i <= 3 ;i++){
+                            if(i != r && obstacles[c] != i )
+                            ans = min (ans,1 + dp[i][c-1]);
+                        }
+                        dp[r][c] = ans;
+                    }
+                }
+            }
+        }
+
+        int res = INT_MAX;
+        for(int k = 1 ;k<=3; k++){
+            res = min (res,dp[k][n-1]);
+        }
+        //  for(auto v : dp){
+        //      for(auto it : v){
+        //          cout<<it<<" ";
+        //      }cout<<endl;
+        //  }
+
+        return res;
+    }
+
+    int minSideJumps(vector<int>& obstacles) {
+
+        //recursive approach
+        // int n = obstacles.size();
+        // int res = solveRec(0,2,n,obstacles);
+
+        //recursion + memoization (top-down ) approach
+        // int n = obstacles.size();
+        // vector<vector<int>> dp(4,vector<int>(n,-1));
+        // int res = solveMem(0,2,n,obstacles,dp);
+
+        //Tabulation (bottom-up) approach
+         int res = solveTab(obstacles);
+
+        return res;
+
+        
+    }
+};
