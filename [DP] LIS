@@ -1,0 +1,105 @@
+class Solution
+{
+    public:
+    
+    
+    //Recursive relation approach
+    // int solveRec(int currIndex , int prevIndex,int n , int a[],int &maxLength){
+    //     if(currIndex >= n) {
+    //         return 0;
+    //     }
+        
+    //   int including = 0;
+    //   if(prevIndex == -1 || (a[currIndex] > a[prevIndex]) ){
+    //       including = 1 + solveRec(currIndex+1,currIndex,n,a,maxLength);
+    //   }
+      
+    //   int excluding = solveRec(currIndex+1,prevIndex,n,a,maxLength);
+      
+    //   return max(including,excluding);
+        
+    // }
+    
+    // Recusion + Memoization
+    // int solveMem(int currIndex , int prevIndex,int n , int a[],vector<vector<int>> &dp){
+    //     if(currIndex >= n) {
+    //         return 0;
+    //     }
+    //     if(dp[currIndex][prevIndex+1] != -1) return dp[currIndex][prevIndex+1];
+        
+    //   int including = 0;
+    //   if(prevIndex == -1 || (a[currIndex] > a[prevIndex]) ){
+    //       including = 1 + solveMem(currIndex+1,currIndex,n,a,dp);
+    //   }
+      
+    //   int excluding = solveMem(currIndex+1,prevIndex,n,a,dp);
+      
+    //   return dp[currIndex][prevIndex+1] = max(including,excluding);
+        
+    // }
+    
+    
+    // Tabulation Method (dry-run karna hai 5 examples pe)
+    int solveTab(int n , int a[]){
+        
+        vector<vector<int>> dp(n+1,vector<int>(n+1,0));
+
+        for(int r = n-1 ; r >=0 ;r--){
+            for(int c = r-1 ; c>=-1;c--){
+                
+                int including = 0;
+                if(c == -1 || (a[r] > a[c]) ){
+                      including = 1 + dp[r+1][r+1];
+                }
+                  
+                int excluding = dp[r+1][c+1];
+                
+                dp[r][c+1] = max(including,excluding);
+            }
+        }
+        
+        return dp[0][0];
+    }
+    
+    // Kafi non-intutive approach
+    int solveBinary(int n, int a[]){
+        vector<int> res;
+        res.push_back(a[0]);
+        for(int i =1 ;i<n;i++){
+        
+            if(a[i] > res[res.size()-1] ) {
+                res.push_back(a[i]);
+            }else{
+                auto low = lower_bound(res.begin(),res.end(),a[i]);
+                auto indx = low - res.begin();
+                res[indx] = a[i];
+                
+            }
+        }
+        
+        return res.size();
+    }
+    
+    
+    
+    //Function to find length of longest increasing subsequence.
+    int longestSubsequence(int n, int a[])
+    {
+            //recursive approach
+        // int res = solveRec(0,-1,n,a);
+        
+            //Recursion + Memoization (Top-down) approach
+        //  vector<vector<int>> dp(n,vector<int>(n+1,-1));
+        //  int res = solveMem(0,-1,n,a,dp);
+            
+            //Tabulation (bottom-up) approach
+        // int res = solveTab(n,a);
+        
+         // Solve Binary O(N* log(N) time complexity)
+         int res = solveBinary(n,a);
+        
+         
+        
+        return res;
+    }
+};
